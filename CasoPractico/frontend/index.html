@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clínica Segura · Caso Práctico Criptografía</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>🔐 Clínica Segura</h1>
+    <p>AES-256-GCM para datos en reposo · Ed25519 para recetas firmadas</p>
+  </header>
+
+  <main>
+    <!-- ============ MECANISMO 1 ============ -->
+    <section class="card">
+      <h2>1. Registrar expediente <span class="tag">Cifrado simétrico</span></h2>
+      <form id="form-expediente">
+        <label>Paciente <input id="paciente" required placeholder="Juan Pérez" /></label>
+        <label>Diagnóstico (confidencial)
+          <textarea id="diagnostico" required rows="3" placeholder="VIH positivo / control mensual"></textarea>
+        </label>
+        <button type="submit">Guardar cifrado</button>
+      </form>
+      <pre id="out-crear" class="out"></pre>
+    </section>
+
+    <section class="card">
+      <h2>Expedientes en la base de datos <span class="tag">Lo que hay en disco</span></h2>
+      <button id="btn-refrescar" class="secondary">Refrescar</button>
+      <table>
+        <thead><tr><th>ID</th><th>Paciente</th><th>diagnostico_cifrado (BD)</th><th>Acciones</th></tr></thead>
+        <tbody id="tabla"></tbody>
+      </table>
+      <pre id="out-leer" class="out"></pre>
+    </section>
+
+    <!-- ============ MECANISMO 2 ============ -->
+    <section class="card">
+      <h2>2. Verificar receta firmada <span class="tag">Firma asimétrica</span></h2>
+      <p class="hint">Pulsa “Emitir receta” en un expediente. Luego edita el JSON (cambia una letra) y verifica de nuevo.</p>
+      <label>Comprobante (payload JSON) <textarea id="payload" rows="8"></textarea></label>
+      <label>Firma (hex) <textarea id="firma" rows="3"></textarea></label>
+      <button id="btn-verificar">Verificar firma</button>
+      <div id="out-verificar" class="result"></div>
+      <details>
+        <summary>Ver llave pública del servidor</summary>
+        <pre id="pubkey" class="out"></pre>
+      </details>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

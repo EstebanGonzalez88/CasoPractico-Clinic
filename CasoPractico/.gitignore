@@ -1,0 +1,13 @@
+# --- Secretos: NUNCA se suben al repositorio ---
+backend/.env
+backend/secrets/
+*.pem
+
+# --- Base de datos local (contiene datos cifrados de prueba) ---
+*.db
+
+# --- Python ---
+__pycache__/
+*.pyc
+.venv/
+venv/
