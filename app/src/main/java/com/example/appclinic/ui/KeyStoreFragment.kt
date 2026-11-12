@@ -122,18 +122,20 @@ class KeyStoreFragment : Fragment() {
         lifecycleScope.launch {
             try {
                 binding.tvEstadoConexion.text = "Conectando con ${ApiClient.getBaseUrl()}..."
+                val context = context ?: return@launch
                 val response = ApiClient.getService().getLlavePublica()
                 if (response.isSuccessful) {
                     val pem = response.body()?.string() ?: ""
                     binding.tvEstadoConexion.text = "✅ Servidor Online (${ApiClient.getBaseUrl()})\nLlave Pública Ed25519 activa:\n${pem.take(60)}..."
-                    binding.tvEstadoConexion.setTextColor(resources.getColor(android.R.color.holo_green_dark, null))
+                    binding.tvEstadoConexion.setTextColor(androidx.core.content.ContextCompat.getColor(context, android.R.color.holo_green_dark))
                 } else {
                     binding.tvEstadoConexion.text = "❌ Respuesta Servidor Error ${response.code()}"
-                    binding.tvEstadoConexion.setTextColor(resources.getColor(android.R.color.holo_red_dark, null))
+                    binding.tvEstadoConexion.setTextColor(androidx.core.content.ContextCompat.getColor(context, android.R.color.holo_red_dark))
                 }
             } catch (e: Exception) {
+                val context = context ?: return@launch
                 binding.tvEstadoConexion.text = "⚠️ No se pudo conectar al servidor: ${e.localizedMessage}\nAsegúrate de ejecutar 'uvicorn app.main:app --reload' en el backend."
-                binding.tvEstadoConexion.setTextColor(resources.getColor(android.R.color.holo_orange_dark, null))
+                binding.tvEstadoConexion.setTextColor(androidx.core.content.ContextCompat.getColor(context, android.R.color.holo_orange_dark))
             }
         }
     }

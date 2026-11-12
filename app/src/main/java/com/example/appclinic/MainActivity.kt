@@ -2,6 +2,8 @@ package com.example.appclinic
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.example.appclinic.databinding.ActivityMainBinding
 import com.example.appclinic.ui.ViewPagerAdapter
 import com.google.android.material.tabs.TabLayoutMediator
@@ -15,6 +17,13 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Respetar la barra de estado y el recorte de la cámara (Camera Cutout / Notch)
+        ViewCompat.setOnApplyWindowInsetsListener(binding.appBarLayout) { view, insets ->
+            val statusBarInsets = insets.getInsets(WindowInsetsCompat.Type.statusBars())
+            view.setPadding(0, statusBarInsets.top, 0, 0)
+            insets
+        }
+
         setSupportActionBar(binding.toolbar)
 
         val adapter = ViewPagerAdapter(this)
@@ -22,9 +31,9 @@ class MainActivity : AppCompatActivity() {
 
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             tab.text = when (position) {
-                0 -> "🔒 Expedientes (AES)"
-                1 -> "✍️ Recetas (Ed25519)"
-                2 -> "🛡️ KeyStore Nativo"
+                0 -> "🔒 Expedientes"
+                1 -> "✍️ Recetas"
+                2 -> "🛡️ KeyStore"
                 else -> "Tab ${position + 1}"
             }
         }.attach()

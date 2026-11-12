@@ -5,20 +5,34 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        app:title="Clínica Segura — Criptografía"
-        app:subtitle="AES-256-GCM &amp; Ed25519 Digital Signature"
-        app:titleTextColor="@android:color/white"
-        app:subtitleTextColor="#D1E4FF" />
+        android:fitsSystemWindows="true">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/medical_blue"
+            app:title="Clínica Segura — Criptografía"
+            app:subtitle="Cifrado AES-256-GCM &amp; Firma Ed25519"
+            app:titleTextColor="@android:color/white"
+            app:subtitleTextColor="#D1E4FF" />
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        app:tabIndicatorColor="@color/medical_blue"
+        app:tabIndicatorHeight="3dp"
+        app:tabSelectedTextColor="@color/medical_blue"
+        app:tabTextColor="#666666"
+        app:tabTextAppearance="@style/CustomTabTextAppearance"
         app:tabMode="fixed"
         app:tabGravity="fill" />
 
