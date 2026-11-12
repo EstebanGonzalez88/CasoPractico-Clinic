@@ -7,8 +7,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object ApiClient {
-    // 10.0.2.2 es la IP del host desde el Emulador de Android
-    private var baseUrl: String = "http://10.0.2.2:8000/"
+    // IP real de la red Wi-Fi de tu computadora (Responde en 1ms)
+    private var baseUrl: String = "http://192.168.1.72:8000/"
 
     private var apiService: ApiService? = null
 
@@ -31,9 +31,9 @@ object ApiClient {
 
             val client = OkHttpClient.Builder()
                 .addInterceptor(logging)
-                .connectTimeout(15, TimeUnit.SECONDS)
-                .readTimeout(15, TimeUnit.SECONDS)
-                .writeTimeout(15, TimeUnit.SECONDS)
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(10, TimeUnit.SECONDS)
                 .build()
 
             val retrofit = Retrofit.Builder()
