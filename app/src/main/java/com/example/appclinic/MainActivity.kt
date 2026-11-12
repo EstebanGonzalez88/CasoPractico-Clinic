@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Respetar la barra de estado y el recorte de la cámara (Camera Cutout / Notch)
+        // Respetar la barra de estado y el recorte de la cámara
         ViewCompat.setOnApplyWindowInsetsListener(binding.appBarLayout) { view, insets ->
             val statusBarInsets = insets.getInsets(WindowInsetsCompat.Type.statusBars())
             view.setPadding(0, statusBarInsets.top, 0, 0)
@@ -31,10 +31,10 @@ class MainActivity : AppCompatActivity() {
 
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             tab.text = when (position) {
-                0 -> "🔒 Expedientes"
-                1 -> "✍️ Recetas"
-                2 -> "🛡️ KeyStore"
-                else -> "Tab ${position + 1}"
+                0 -> "Expedientes"
+                1 -> "Recetas Médicas"
+                2 -> "Seguridad & Config"
+                else -> "Sección ${position + 1}"
             }
         }.attach()
     }

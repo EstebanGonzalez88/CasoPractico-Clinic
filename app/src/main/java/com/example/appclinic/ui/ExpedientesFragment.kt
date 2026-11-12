@@ -47,24 +47,24 @@ class ExpedientesFragment : Fragment() {
         val diagnostico = binding.etDiagnostico.text.toString().trim()
 
         if (paciente.isEmpty() || diagnostico.isEmpty()) {
-            Toast.makeText(context, "Completa paciente y diagnóstico", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Ingrese el nombre del paciente y el diagnóstico", Toast.LENGTH_SHORT).show()
             return
         }
 
         lifecycleScope.launch {
             try {
                 binding.btnGuardar.isEnabled = false
-                binding.tvResultadoGuardado.text = "Cifrando con AES-256-GCM y guardando en BD..."
+                binding.tvResultadoGuardado.text = "Procesando cifrado AES-256-GCM y guardando en servidor..."
 
                 val response = ApiClient.getService().crearExpediente(ExpedienteIn(paciente, diagnostico))
                 if (response.isSuccessful && response.body() != null) {
                     val body = response.body()!!
                     val resultadoText = """
-                        ✅ EXPEDIENTE REGISTRADO Y CIFRADO
-                        • ID Registrado: ${body.id}
-                        • Mensaje: ${body.mensaje}
+                        [REGISTRO GUARDADO Y CIFRADO]
+                        - ID de Expediente: ${body.id}
+                        - Estado: ${body.mensaje}
                         
-                        🔒 EVIDENCIA CIFRADO EN BD (AES-256-GCM Base64):
+                        EVIDENCIA DE CIFRADO EN BD (AES-256-GCM Base64):
                         ${body.almacenadoEnBd}
                     """.trimIndent()
                     binding.tvResultadoGuardado.text = resultadoText
@@ -73,7 +73,7 @@ class ExpedientesFragment : Fragment() {
                     binding.tvResultadoGuardado.text = "Error del servidor: ${response.code()} ${response.errorBody()?.string()}"
                 }
             } catch (e: Exception) {
-                binding.tvResultadoGuardado.text = "Error de conexión: ${e.localizedMessage}\n(Asegúrate que el backend de Python esté corriendo)"
+                binding.tvResultadoGuardado.text = "Error de conexión: ${e.localizedMessage}\n(Verifique que el servidor de backend esté en ejecución)"
             } finally {
                 binding.btnGuardar.isEnabled = true
             }
@@ -85,27 +85,27 @@ class ExpedientesFragment : Fragment() {
         val recordId = recordIdStr.toIntOrNull()
 
         if (recordId == null) {
-            Toast.makeText(context, "Ingresa un ID válido", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Ingrese un ID de expediente válido", Toast.LENGTH_SHORT).show()
             return
         }
 
         lifecycleScope.launch {
             try {
                 binding.btnBuscarDescifrar.isEnabled = false
-                binding.tvResultadoDescifrado.text = "Descifrando registro #$recordId..."
+                binding.tvResultadoDescifrado.text = "Consultando y descifrando expediente #$recordId..."
 
                 val response = ApiClient.getService().leerExpediente(recordId)
                 if (response.isSuccessful && response.body() != null) {
                     val body = response.body()!!
                     val texto = """
-                        🔓 CONSULTA Y DESCIFRADO EXITOSO
-                        • ID: ${body.id}
-                        • Paciente: ${body.paciente}
+                        [CONSULTA Y DESCIFRADO EXITOSO]
+                        - ID: ${body.id}
+                        - Paciente: ${body.paciente}
                         
-                        📜 DIAGNÓSTICO DESCIFRADO (Texto Plano):
+                        DIAGNÓSTICO DESCIFRADO (Texto Plano):
                         "${body.diagnosticoDescifrado}"
                         
-                        🔒 DATO CIFRADO EN BD (Raw Ciphertext):
+                        DATO ALMACENADO CIFRADO EN BD (Raw Ciphertext):
                         ${body.evidenciaCifradoBd}
                     """.trimIndent()
                     binding.tvResultadoDescifrado.text = texto
@@ -128,17 +128,17 @@ class ExpedientesFragment : Fragment() {
                 if (response.isSuccessful && response.body() != null) {
                     val lista = response.body()!!
                     if (lista.isEmpty()) {
-                        binding.tvResultadoDescifrado.text = "La base de datos está vacía. Guarda un expediente primero."
+                        binding.tvResultadoDescifrado.text = "La base de datos no contiene expedientes registrados."
                         return@launch
                     }
-                    val sb = StringBuilder("📦 LISTA DE REGISTROS EN BASE DE DATOS (TODOS CIFRADOS):\n\n")
+                    val sb = StringBuilder("[REGISTROS CIFRADOS EN BASE DE DATOS]\n\n")
                     lista.forEach { item ->
-                        sb.append("• ID ${item.id} | Paciente: ${item.paciente}\n")
+                        sb.append("- ID ${item.id} | Paciente: ${item.paciente}\n")
                         sb.append("  Cifrado BD: ${item.diagnosticoCifrado}\n\n")
                     }
                     binding.tvResultadoDescifrado.text = sb.toString().trimEnd()
                 } else {
-                    binding.tvResultadoDescifrado.text = "Error al listar: ${response.code()}"
+                    binding.tvResultadoDescifrado.text = "Error al consultar: ${response.code()}"
                 }
             } catch (e: Exception) {
                 binding.tvResultadoDescifrado.text = "Error de conexión: ${e.localizedMessage}"

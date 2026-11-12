@@ -52,7 +52,7 @@ class KeyStoreFragment : Fragment() {
     private fun cifrarLocal() {
         val textoPlano = binding.etTextoLocal.text.toString().trim()
         if (textoPlano.isEmpty()) {
-            Toast.makeText(context, "Ingresa un texto para cifrar", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Ingrese un texto para cifrar", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -66,14 +66,14 @@ class KeyStoreFragment : Fragment() {
             }
 
             val resultadoText = """
-                🛡️ CIFRADO EN HARDWARE ANDROID (AES-256-GCM)
-                • Clave resguardada en: Android KeyStore (TEE)
-                • Alias de la Clave: "AppClinicLocalKey"
+                [CIFRADO EN HARDWARE ANDROID - AES-256-GCM]
+                - Custodia de clave: Android KeyStore (TEE / Hardware)
+                - Alias: "AppClinicLocalKey"
                 
-                🔒 CIFRADO BASE64 RESULTANTE:
+                CIFRADO BASE64 RESULTANTE:
                 $cipherBase64
                 
-                (Se guardó copia en EncryptedSharedPreferences con MasterKey AES-256)
+                (Se almacenó una copia en EncryptedSharedPreferences con MasterKey AES-256)
             """.trimIndent()
 
             binding.tvResultadoLocal.text = resultadoText
@@ -88,16 +88,16 @@ class KeyStoreFragment : Fragment() {
         }
 
         if (cipherBase64.isNullOrEmpty()) {
-            Toast.makeText(context, "Cifra un texto primero", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Realice un cifrado primero", Toast.LENGTH_SHORT).show()
             return
         }
 
         try {
             val textoDescifrado = AndroidKeyStoreManager.decryptLocalData(cipherBase64)
             val resultadoText = """
-                🔓 DESCIFRADO DESDE KEYSTORE EXITOSO
+                [DESCIFRADO DESDE KEYSTORE EXITOSO]
                 
-                📜 TEXTO ORIGINAL RECUPERADO:
+                TEXTO ORIGINAL RECUPERADO:
                 "$textoDescifrado"
             """.trimIndent()
 
@@ -110,7 +110,7 @@ class KeyStoreFragment : Fragment() {
     private fun actualizarUrlYProbar() {
         val newUrl = binding.etBaseUrl.text.toString().trim()
         if (newUrl.isEmpty()) {
-            Toast.makeText(context, "Ingresa una URL válida", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Ingrese una URL de API válida", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -126,15 +126,15 @@ class KeyStoreFragment : Fragment() {
                 val response = ApiClient.getService().getLlavePublica()
                 if (response.isSuccessful) {
                     val pem = response.body()?.string() ?: ""
-                    binding.tvEstadoConexion.text = "✅ Servidor Online (${ApiClient.getBaseUrl()})\nLlave Pública Ed25519 activa:\n${pem.take(60)}..."
+                    binding.tvEstadoConexion.text = "[SERVIDOR ONLINE] (${ApiClient.getBaseUrl()})\nClave Pública Ed25519 activa:\n${pem.take(60)}..."
                     binding.tvEstadoConexion.setTextColor(androidx.core.content.ContextCompat.getColor(context, android.R.color.holo_green_dark))
                 } else {
-                    binding.tvEstadoConexion.text = "❌ Respuesta Servidor Error ${response.code()}"
+                    binding.tvEstadoConexion.text = "[ERROR DE SERVIDOR] Código HTTP: ${response.code()}"
                     binding.tvEstadoConexion.setTextColor(androidx.core.content.ContextCompat.getColor(context, android.R.color.holo_red_dark))
                 }
             } catch (e: Exception) {
                 val context = context ?: return@launch
-                binding.tvEstadoConexion.text = "⚠️ No se pudo conectar al servidor: ${e.localizedMessage}\nAsegúrate de ejecutar 'uvicorn app.main:app --reload' en el backend."
+                binding.tvEstadoConexion.text = "[ERROR DE CONEXIÓN] ${e.localizedMessage}\nVerifique que el servidor Python esté en ejecución."
                 binding.tvEstadoConexion.setTextColor(androidx.core.content.ContextCompat.getColor(context, android.R.color.holo_orange_dark))
             }
         }

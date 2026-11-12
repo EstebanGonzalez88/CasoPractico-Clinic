@@ -54,14 +54,14 @@ class ComprobantesFragment : Fragment() {
         val recordId = recordIdStr.toIntOrNull()
 
         if (recordId == null) {
-            Toast.makeText(context, "Ingresa un ID válido", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Ingrese un ID de expediente válido", Toast.LENGTH_SHORT).show()
             return
         }
 
         lifecycleScope.launch {
             try {
                 binding.btnEmitirComprobante.isEnabled = false
-                binding.tvDetalleComprobante.text = "Emitiendo receta y firmando con Ed25519..."
+                binding.tvDetalleComprobante.text = "Generando receta y procesando firma Ed25519..."
 
                 val response = ApiClient.getService().emitirComprobante(recordId)
                 if (response.isSuccessful && response.body() != null) {
@@ -73,22 +73,22 @@ class ComprobantesFragment : Fragment() {
                     binding.etJsonEditable.setText(jsonPretty)
 
                     val texto = """
-                        ✍️ COMPROBANTE EMITIDO Y FIRMADO (Ed25519)
-                        • Algoritmo: ${body.algoritmo}
+                        [RECETA EMITIDA Y FIRMADA DIGITALMENTE]
+                        - Algoritmo: ${body.algoritmo}
                         
-                        📜 FIRMA DIGITAL (Hexadecimal):
+                        FIRMA DIGITAL (Hexadecimal):
                         ${body.firmaDigital}
                         
-                        📄 CONTENIDO DEL DOCUMENTO (JSON):
+                        CONTENIDO DEL DOCUMENTO (JSON):
                         $jsonPretty
                     """.trimIndent()
 
                     binding.tvDetalleComprobante.text = texto
-                    binding.tvResultadoVerificacion.text = "✅ Receta lista. Pulsa 'Verificar Firma Digital Original' o edita el JSON abajo para simular un ataque."
+                    binding.tvResultadoVerificacion.text = "Documento emitido correctamente. Presione 'Verificar Firma Digital Original' o edite el JSON para probar la verificación."
                     binding.tvResultadoVerificacion.setBackgroundColor(Color.parseColor("#E8F5E9"))
                     binding.tvResultadoVerificacion.setTextColor(Color.parseColor("#1B5E20"))
                 } else {
-                    binding.tvDetalleComprobante.text = "Error ${response.code()}: No se pudo emitir comprobante para expediente #$recordId (guarda uno primero)."
+                    binding.tvDetalleComprobante.text = "Error ${response.code()}: No se pudo emitir comprobante para el expediente #$recordId."
                 }
             } catch (e: Exception) {
                 binding.tvDetalleComprobante.text = "Error de conexión: ${e.localizedMessage}"
@@ -103,11 +103,11 @@ class ComprobantesFragment : Fragment() {
         val firmaHex = currentSignatureHex
 
         if (payload == null || firmaHex == null) {
-            Toast.makeText(context, "Emite un comprobante primero", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Emita una receta primero", Toast.LENGTH_SHORT).show()
             return
         }
 
-        verificarFirma(payload, firmaHex, "Firma Original Intacta")
+        verificarFirma(payload, firmaHex, "Verificación de Firma Original")
     }
 
     private fun verificarManipulado() {
@@ -115,23 +115,23 @@ class ComprobantesFragment : Fragment() {
         val firmaHex = currentSignatureHex
 
         if (jsonText.isEmpty() || firmaHex == null) {
-            Toast.makeText(context, "Emite un comprobante primero", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Emita una receta primero", Toast.LENGTH_SHORT).show()
             return
         }
 
         try {
             val mapType = object : TypeToken<Map<String, Any?>>() {}.type
             val modifiedPayload: Map<String, Any?> = gson.fromJson(jsonText, mapType)
-            verificarFirma(modifiedPayload, firmaHex, "Comprobante Editable (Prueba de Manipulación)")
+            verificarFirma(modifiedPayload, firmaHex, "Prueba de Modificación del Documento")
         } catch (e: Exception) {
-            Toast.makeText(context, "El JSON editado no es un JSON válido", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "El texto ingresado no posee formato JSON válido", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun verificarFirma(payload: Map<String, Any?>, firmaHex: String, tagContexto: String) {
         lifecycleScope.launch {
             try {
-                binding.tvResultadoVerificacion.text = "Verificando firma con llave pública Ed25519..."
+                binding.tvResultadoVerificacion.text = "Validando firma con clave pública..."
 
                 val req = VerificacionRequest(payload, firmaHex)
                 val response = ApiClient.getService().verificarComprobante(req)
@@ -139,19 +139,19 @@ class ComprobantesFragment : Fragment() {
                     val res = response.body()!!
                     if (res.valido) {
                         binding.tvResultadoVerificacion.text = """
-                            ✅ FIRMA VÁLIDA — [$tagContexto]
+                            [FIRMA VÁLIDA - $tagContexto]
                             ${res.mensaje}
-                            • La firma Ed25519 coincide exactamente con los datos.
-                            • Se garantiza AUTENTICIDAD E INTEGRIDAD INALTERADA.
+                            - La firma Ed25519 coincide exactamente con el contenido del documento.
+                            - Autenticidad e integridad garantizadas.
                         """.trimIndent()
                         binding.tvResultadoVerificacion.setBackgroundColor(Color.parseColor("#E8F5E9"))
                         binding.tvResultadoVerificacion.setTextColor(Color.parseColor("#1B5E20"))
                     } else {
                         binding.tvResultadoVerificacion.text = """
-                            ❌ FIRMA INVÁLIDA (ALERTA DE SEGURIDAD) — [$tagContexto]
+                            [FIRMA INVÁLIDA - $tagContexto]
                             ${res.mensaje}
-                            • El documento FUE MODIFICADO o manipulado.
-                            • La firma digital ya NO coincide con el contenido.
+                            - El contenido del documento ha sido modificado o alterado.
+                            - La firma digital no coincide con la información presentada.
                         """.trimIndent()
                         binding.tvResultadoVerificacion.setBackgroundColor(Color.parseColor("#FFEBEE"))
                         binding.tvResultadoVerificacion.setTextColor(Color.parseColor("#B71C1C"))

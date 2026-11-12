@@ -17,8 +17,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             app:cardCornerRadius="12dp"
-            app:cardElevation="4dp"
-            app:strokeColor="#9C27B0"
+            app:cardElevation="2dp"
+            app:strokeColor="#7B1FA2"
             app:strokeWidth="1dp">
 
             <LinearLayout
@@ -30,16 +30,16 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="✍️ Mecanismo 2: Firma Digital Asimétrica (Ed25519)"
+                    android:text="Mecanismo 2: Firma Digital Asimétrica (Ed25519)"
                     android:textColor="#4A148C"
-                    android:textSize="16sp"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="La clínica firma recetas con su clave privada Ed25519. Cualquier persona con la clave pública puede verificar que el documento no ha sido alterado (Integridad y Autenticidad)."
+                    android:text="Las recetas médicas son firmadas digitalmente con la clave privada Ed25519 del emisor. La clave pública permite validar la integridad y autenticidad del documento."
                     android:textColor="#37474F"
                     android:textSize="13sp" />
             </LinearLayout>
@@ -56,14 +56,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="ID del Expediente">
+                android:hint="ID de Expediente">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etComprobanteRecordId"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:text="1" />
+                    android:inputType="number" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
@@ -72,7 +71,8 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="8dp"
                 android:backgroundTint="#7B1FA2"
-                android:text="Emitir Receta Firmada" />
+                android:text="Emitir Receta"
+                app:cornerRadius="8dp" />
         </LinearLayout>
 
         <!-- Detalle Receta Emitida -->
@@ -84,7 +84,7 @@
             android:background="#F3E5F5"
             android:fontFamily="monospace"
             android:padding="12dp"
-            android:text="Genera un comprobante para ver la firma..."
+            android:text="Ingrese el ID de expediente para emitir la receta digital."
             android:textColor="#4A148C"
             android:textSize="12sp" />
 
@@ -96,8 +96,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:backgroundTint="#2E7D32"
-            android:text="1. Verificar Firma Digital Original"
-            app:icon="@android:drawable/checkbox_on_background" />
+            android:text="Verificar Firma Digital Original"
+            app:cornerRadius="8dp" />
 
         <View
             android:layout_width="match_parent"
@@ -109,7 +109,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="⚠️ Demostración de Integridad (Simulación de Ataque)"
+            android:text="Prueba de Integridad (Simulación de Modificación)"
             android:textColor="#C62828"
             android:textSize="15sp"
             android:textStyle="bold" />
@@ -118,7 +118,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:text="Edita el JSON del comprobante abajo (ej. cambia el nombre o diagnóstico) y pulsa 'Verificar Firma Manipulada':"
+            android:text="Edite el contenido JSON del comprobante abajo y presione 'Verificar Documento Modificado':"
             android:textColor="#555555"
             android:textSize="12sp" />
 
@@ -127,7 +127,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:hint="JSON editable del Comprobante">
+            android:hint="JSON del Comprobante (Editable)">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etJsonEditable"
@@ -147,8 +147,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:backgroundTint="#D32F2F"
-            android:text="2. Verificar Firma Manipulada"
-            app:icon="@android:drawable/ic_delete" />
+            android:text="Verificar Documento Modificado"
+            app:cornerRadius="8dp" />
 
         <!-- Resultado de la Verificación -->
         <TextView
@@ -159,7 +159,7 @@
             android:background="#EEEEEE"
             android:fontFamily="monospace"
             android:padding="12dp"
-            android:text="Estado de verificación: Esperando acción"
+            android:text="Estado de verificación: En espera de acción."
             android:textColor="#333333"
             android:textSize="13sp"
             android:textStyle="bold" />

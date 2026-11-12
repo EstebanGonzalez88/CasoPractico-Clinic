@@ -16,8 +16,8 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/medical_blue"
-            app:title="Clínica Segura — Criptografía"
-            app:subtitle="Cifrado AES-256-GCM &amp; Firma Ed25519"
+            app:title="Clínica Segura"
+            app:subtitle="Sistema de Expedientes &amp; Recetas Digitales"
             app:titleTextColor="@android:color/white"
             app:subtitleTextColor="#D1E4FF" />
 

@@ -31,7 +31,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="🔒 Mecanismo 1: Cifrado Simétrico AES-256-GCM"
+                    android:text="Mecanismo 1: Cifrado Simétrico (AES-256-GCM)"
                     android:textColor="@color/medical_blue_dark"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -40,7 +40,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="El diagnóstico del paciente se cifra con AES-256-GCM antes de guardarse en la BD. La clave simétrica está resguardada en .env y asociada al ID del expediente (AAD)."
+                    android:text="El diagnóstico médico se cifra con AES-256-GCM antes de persistir en la base de datos. La clave simétrica está protegida en el servidor mediante datos asociados (AAD)."
                     android:textColor="#37474F"
                     android:textSize="13sp" />
             </LinearLayout>
@@ -57,8 +57,7 @@
                 android:id="@+id/etPaciente"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:text="Carlos Mendoza" />
+                android:inputType="textPersonName" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -66,7 +65,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:hint="Diagnóstico Confidencial (Texto Plano)">
+            android:hint="Diagnóstico Confidencial">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etDiagnostico"
@@ -74,8 +73,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="top"
                 android:inputType="textMultiLine"
-                android:lines="3"
-                android:text="Paciente presenta cuadro febril. Tratamiento con cefalosporinas. Diagnóstico reservado." />
+                android:lines="3" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
@@ -85,7 +83,7 @@
             android:layout_marginTop="12dp"
             android:backgroundTint="@color/medical_blue"
             android:paddingVertical="12dp"
-            android:text="Cifrar y Guardar Expediente"
+            android:text="Guardar y Cifrar Expediente"
             app:cornerRadius="8dp"
             app:icon="@android:drawable/ic_menu_save" />
 
@@ -98,7 +96,7 @@
             android:background="#E8F1FF"
             android:fontFamily="monospace"
             android:padding="12dp"
-            android:text="Esperando registro..."
+            android:text="Estado: En espera de registro."
             android:textColor="@color/medical_blue_dark"
             android:textSize="12sp" />
 
@@ -112,7 +110,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="🔓 Consultar y Descifrar Expediente por ID"
+            android:text="Consultar y Descifrar Expediente"
             android:textColor="#1B5E20"
             android:textSize="15sp"
             android:textStyle="bold" />
@@ -128,14 +126,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="ID Expediente">
+                android:hint="ID de Expediente">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etRecordId"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:text="1" />
+                    android:inputType="number" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
@@ -153,7 +150,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginStart="6dp"
-                android:text="Listar BD"
+                android:text="Ver Todos"
                 app:cornerRadius="8dp" />
         </LinearLayout>
 
@@ -166,7 +163,7 @@
             android:background="#E8F5E9"
             android:fontFamily="monospace"
             android:padding="12dp"
-            android:text="Presiona 'Descifrar' o 'Listar BD' para consultar."
+            android:text="Ingrese un ID de expediente y presione 'Descifrar'."
             android:textColor="#1B5E20"
             android:textSize="12sp" />
 
